@@ -12,7 +12,7 @@ function User() {
         // getUserRepos(params.login);
     }, [getUser, params.login]);
 
-    return <div>{user.login}</div>;
+    return <div>USER</div>;
 }
 
 export default User;
