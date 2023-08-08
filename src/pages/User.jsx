@@ -10,9 +10,9 @@ function User() {
     useEffect(() => {
         getUser(params.login);
         // getUserRepos(params.login);
-    }, [getUser, params.login]);
+    }, []);
 
-    return <div>USER</div>;
+    return <div>{user.login}</div>;
 }
 
 export default User;

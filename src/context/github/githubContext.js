@@ -38,15 +38,15 @@ export const GithubProvider = ({ children }) => {
         });
     };
 
+    // get single user
     const getUser = async (login) => {
         setLoading();
 
-        const response = await fetch(`${GITHUB_URL}/user?${login}`, {
+        const response = await fetch(`${GITHUB_URL}/users/${login}`, {
             headers: {
                 Authorization: `token ${GITHUB_TOKEN}`,
             },
         });
-
         if (response.status === 404) {
             window.location = '/notfound';
         } else {
