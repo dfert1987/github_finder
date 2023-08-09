@@ -1,5 +1,6 @@
 import { createContext, useReducer } from 'react';
 import githubReducer from './githubReducer';
+import { FaTrashRestore } from 'react-icons/fa';
 
 const GithubContext = createContext();
 
@@ -10,6 +11,7 @@ export const GithubProvider = ({ children }) => {
     const initialState = {
         users: [],
         user: {},
+        repos: [],
         isLoading: false,
     };
 
@@ -41,7 +43,6 @@ export const GithubProvider = ({ children }) => {
     // get single user
     const getUser = async (login) => {
         setLoading();
-
         const response = await fetch(`${GITHUB_URL}/users/${login}`, {
             headers: {
                 Authorization: `token ${GITHUB_TOKEN}`,
@@ -51,12 +52,30 @@ export const GithubProvider = ({ children }) => {
             window.location = '/notfound';
         } else {
             const data = await response.json();
-
             dispatch({
                 type: 'GET_USER',
                 payload: data,
             });
         }
+    };
+
+    const getUserRepos = async (login) => {
+        setLoading();
+        console.log(login);
+
+        const response = await fetch(`${GITHUB_URL}/users/${login}/repos`, {
+            headers: {
+                Authorization: `token ${GITHUB_TOKEN}`,
+            },
+        });
+
+        const data = await response.json();
+        console.log(data);
+
+        dispatch({
+            type: 'GET_REPOS',
+            payload: data,
+        });
     };
 
     const setLoading = () => dispatch({ type: 'SET_LOADING' });
@@ -70,6 +89,8 @@ export const GithubProvider = ({ children }) => {
                 clearUsers,
                 getUser,
                 user: state.user,
+                repos: state.repos,
+                getUserRepos,
             }}>
             {children}
         </GithubContext.Provider>
