@@ -1,6 +1,5 @@
 import { createContext, useReducer } from 'react';
 import githubReducer from './githubReducer';
-import { FaTrashRestore } from 'react-icons/fa';
 
 const GithubContext = createContext();
 
@@ -61,16 +60,22 @@ export const GithubProvider = ({ children }) => {
 
     const getUserRepos = async (login) => {
         setLoading();
-        console.log(login);
 
-        const response = await fetch(`${GITHUB_URL}/users/${login}/repos`, {
-            headers: {
-                Authorization: `token ${GITHUB_TOKEN}`,
-            },
+        const params = new URLSearchParams({
+            sort: 'created',
+            per_page: 10,
         });
 
+        const response = await fetch(
+            `${GITHUB_URL}/users/${login}/repos?${params}`,
+            {
+                headers: {
+                    Authorization: `token ${GITHUB_TOKEN}`,
+                },
+            }
+        );
+
         const data = await response.json();
-        console.log(data);
 
         dispatch({
             type: 'GET_REPOS',
